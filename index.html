@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KUNSTREAMPERU - Plataforma de Streaming</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #e0e0e0;
+            background: radial-gradient(circle at top right, #0a0a0a, #1a1a1a);
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            transition: background 0.3s ease, padding 0.3s ease;
+        }
+
+        header.scrolled {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 0.5rem 0;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            transition: font-size 0.3s ease, color 0.3s ease;
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            justify-content: flex-end;
+            margin: 0;
+        }
+
+        nav ul li {
+            margin: 0 1.5rem;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 0.75rem 1rem;
+            border-radius: 5px;
+            transition: background 0.3s, transform 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav ul li a::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            width: 0;
+            height: 2px;
+            background: #ff4500;
+            transition: width 0.3s ease, left 0.3s ease;
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+            left: 0;
+        }
+
+        nav ul li a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: url('https://images.pexels.com/photos/3385156/pexels-photo-3385156.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') no-repeat center center/cover;
+            color: #fff;
+            padding: 8rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            max-width: 700px;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            z-index: 2;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #0072ff, #00c6ff);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Section Styling */
+        .categories, .platforms, .about, .contact {
+            padding: 5rem 1rem;
+            background: rgba(0, 0, 0, 0.8);
+            color: #e0e0e0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .categories::before, .platforms::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at top right, rgba(255, 100, 0, 0.2), rgba(255, 100, 0, 0));
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .categories h2, .platforms h2 {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+            color: #00c6ff;
+            position: relative;
+            z-index: 2;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .category-grid, .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .category-item, .platform-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .category-item:hover, .platform-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+        }
+
+        .category-item img, .platform-item img {
+            width: 100%;
+            height: 250px; /* Reducido el tamaño */
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .category-item:hover img, .platform-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .category-overlay, .platform-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+            transform: translateY(100%);
+            transition: transform 0.3s, opacity 0.3s;
+        }
+
+        .category-item:hover .category-overlay, .platform-item:hover .platform-overlay {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .category-overlay h3, .platform-overlay h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .category-overlay p, .platform-overlay p {
+            margin: 0;
+        }
+
+        /* Contact Styling */
+        .contact .container {
+            text-align: center;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .contact-info a {
+            text-decoration: none;
+            color: #00c6ff;
+            font-size: 1.5rem;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .contact-info a:hover {
+            color: #0072ff;
+            transform: translateY(-2px);
+        }
+
+        .contact-info .icon-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .contact-info img.icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(0, 0, 0, 0.8);
+            color: #e0e0e0;
+            text-align: center;
+            padding: 1rem 0;
+            position: relative;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <header id="header">
+        <div class="container">
+            <h1>KUNSTREAMPERU</h1>
+            <nav>
+                <ul>
+                    <li><a href="#categories">Categorías</a></li>
+                    <li><a href="#platforms">Plataformas</a></li>
+                    <li><a href="#about">Acerca de</a></li>
+                    <li><a href="#contact">Contacto</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Bienvenido a KUNSTREAMPERU</h2>
+            <p>La mejor plataforma para encontrar tus series y películas favoritas.</p>
+            <a href="#categories" class="btn-primary">Explorar Categorías</a>
+        </div>
+    </section>
+    <section id="categories" class="categories">
+        <h2>Categorías Populares</h2>
+        <div class="category-grid">
+            <!-- Añadir categorías aquí -->
+            <div class="category-item">
+                <img src="https://media.gq.com.mx/photos/5be9df325c1fcbd1504c3507/4:3/w_1600,h_1200,c_limit/john_whick_327.jpg" alt="Categoría 1">
+                <div class="category-overlay">
+                    <h3>ACCIÓN </h3>
+                    <p> Explosivos enfrentamientos, persecuciones vertiginosas y héroes en movimiento. ¡La adrenalina no para en el cine de acción!</p>
+                </div>
+            </div>
+            <div class="category-item">
+                <img src="https://www.mundodeportivo.com/alfabeta/hero/2022/03/Soy-Leyenda.jpeg?width=768&aspect_ratio=16:9&format=nowebp" alt="Categoría 2">
+                <div class="category-overlay">
+                    <h3>DRAMA </h3>
+                    <p>Historias intensas que exploran las emociones humanas más profundas. Perfecto para quienes buscan una conexión emocional genuina.</p>
+                </div>
+            </div>
+            <div class="category-item">
+                <img src="https://i.blogs.es/758382/portada-after-en-mil-pedazos-exito-taquilla/450_1000.jpeg" alt="ROMANCE">
+                <div class="category-overlay">
+                    <h3>ROMANCE </h3>
+                    <p>Relatos apasionados y emotivos sobre el amor en todas sus formas. Ideal para los que disfrutan de historias de corazones entrelazados.</p>
+                </div>
+            </div>
+            <div class="category-item">
+                <img src="https://www.rockandpop.cl/wp-content/uploads/2020/06/2034bbf2abc28ad45bf13e91807512d0.jpg" alt="ROMANCE">
+                <div class="category-overlay">
+                    <h3>COMEDIA </h3>
+                    <p>Risas garantizadas con situaciones hilarantes y personajes encantadores. ¡Una dosis de humor que alegra el día!</p>
+                </div>
+            </div>
+            <div class="category-item">
+                <img src="https://i.pinimg.com/236x/8f/7f/cd/8f7fcdb8804bcd69a48aad5c91dd9aaf.jpg" alt="ROMANCE">
+                <div class="category-overlay">
+                    <h3>AVENTURA </h3>
+                    <p>Viajes épicos y exploraciones emocionantes. Para aquellos que desean sumergirse en mundos desconocidos y vivir grandes hazañas.</p>
+                </div>
+            </div>
+            <div class="category-item">
+                <img src="https://e1.pxfuel.com/desktop-wallpaper/468/443/desktop-wallpaper-best-5-suspense-on-hip-thriller-movies.jpg" alt="ROMANCE">
+                <div class="category-overlay">
+                    <h3>SUSPENCE </h3>
+                    <p>Tramas intrigantes llenas de misterio y tensión que mantienen al espectador al borde de su asiento. Perfecto para los que aman las sorpresas.</p>
+                </div>
+            </div>
+            <div class="category-item">
+                <img src="https://i.pinimg.com/736x/57/27/54/5727544012696537a26add4bba06bae5.jpg" alt="ROMANCE">
+                <div class="category-overlay">
+                    <h3>TERROR </h3>
+                    <p> Experiencias escalofriantes y perturbadoras que desafían los límites del miedo. Ideal para quienes buscan emociones aterradoras.</p>
+                </div>
+            </div>
+            <div class="category-item">
+                <img src="https://as01.epimg.net/epik/imagenes/2020/02/02/portada/1580662115_444434_1580662430_noticia_normal_recorte1.jpg" alt="ROMANCE">
+                <div class="category-overlay">
+                    <h3>CIENCIA FICCIÓN </h3>
+                    <p>Viajes a futuros lejanos y mundos imaginarios donde la tecnología y el espacio desafían la realidad. Para los entusiastas de lo fantástico y lo innovador.</p>
+                </div>
+            </div>
+            <div class="category-item">
+                <img src="https://media.revistagq.com/photos/5d2f0d6e987c410008631535/1:1/w_1979,h_1979,c_limit/del%20reves.jpg" alt="ROMANCE">
+                <div class="category-overlay">
+                    <h3>ANIMACIÓN </h3>
+                    <p>Mundo visualmente vibrante y creativo que cautiva tanto a niños como a adultos. Historias que cobran vida con imaginación y arte.</p>
+                </div>
+            </div>
+            <div class="category-item">
+                <img src="https://media.a24.com/p/9aedc0d89a795a192673db6748a1aed8/adjuntos/296/imagenes/008/767/0008767273/1200x675/smart/peliculas-amazonjpg.jpg" alt="ROMANCE">
+                <div class="category-overlay">
+                    <h3>TRILLER </h3>
+                    <p>Tramas intensas llenas de acción y giros inesperados. Mantiene a los espectadores en vilo con cada escena, esperando el próximo giro.</p>
+                </div>
+            </div>
+            <!-- Agregar más categorías aquí -->
+        </div>
+    </section>
+    <section id="platforms" class="platforms">
+        <h2>Plataformas de Streaming</h2>
+        <div class="platform-grid">
+            <!-- Añadir plataformas aquí -->
+            <div class="platform-item">
+                <img src="https://almomento.mx/wp-content/uploads/2024/05/Estrenos-Netflix-mayo-de-2024.jpg" alt="Plataforma 1">
+                <div class="platform-overlay">
+                    <h3>Netflix</h3>
+                    <p>"Netflix ofrece una amplia variedad de series, películas y documentales en streaming. Con una interfaz intuitiva y una oferta de contenido original, es una de las plataformas de entretenimiento más populares del mundo. Desde dramas y comedias hasta ciencia ficción y documentales, siempre encontrarás algo nuevo para ver."</p>
+                </div>
+            </div>
+            <div class="platform-item">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQShtaF52kwXDAX6nX95vAoVKwNnibs0kxRdw&s" alt="Plataforma 2">
+                <div class="platform-overlay">
+                    <h3>HBO</h3>
+                    <p>"HBO es conocido por sus producciones de alta calidad y sus exclusivas series originales, como 'Game of Thrones' y 'Succession'. Además de una selección premium de películas y documentales, HBO ofrece contenido innovador y de alto impacto que ha marcado tendencia en la industria del entretenimiento."</p>
+                </div>
+            </div>
+            <div class="platform-item">
+                <img src="https://cdn.hobbyconsolas.com/sites/navi.axelspringer.es/public/media/image/2021/12/amazon-prime-video-2565317.jpg?tf=1200x675" alt="Plataforma 2">
+                <div class="platform-overlay">
+                    <h3>PRIME VIDEO</h3>
+                    <p>"Prime Video, de Amazon, proporciona una extensa biblioteca de películas y series, junto con contenido original galardonado. Los suscriptores disfrutan de una mezcla de títulos recientes y clásicos, además de la ventaja adicional de integrar servicios de compra y alquiler de películas a través de Amazon."</p>
+                </div>
+            </div>
+            
+            
+            
+            
+            
+            <!-- Agregar más plataformas aquí -->
+        </div>
+    </section>
+    <section id="about" class="about">
+        <div class="container">
+            <h2>Acerca de Nosotros</h2>
+            <p>En KUNSTREAMPERU, nuestro compromiso es brindarte una experiencia de streaming inigualable. Nos especializamos en ayudarte a descubrir y disfrutar las mejores plataformas de streaming del mercado, ofreciéndote una guía completa y actualizada sobre contenido de calidad.
+
+Creemos que encontrar el entretenimiento adecuado debería ser fácil y agradable. Por eso, trabajamos arduamente para proporcionarte información detallada sobre las plataformas más populares, sus ofertas de contenido y sus características exclusivas. Ya sea que estés buscando la última serie de moda, una película clásica o un documental intrigante, en KUNSTREAMPERU encontrarás lo que necesitas para que cada momento de ocio sea perfecto.
+
+Nuestra misión es ser tu recurso confiable para explorar el mundo del streaming, ayudándote a tomar decisiones informadas y a disfrutar al máximo de tus momentos de entretenimiento. ¡Bienvenido a KUNSTREAMPERU, tu puerta de entrada al mejor contenido digital!</p>
+        </div>
+    </section>
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2>Contacto</h2>
+            <p>Si tienes alguna pregunta o comentario, no dudes en contactarnos.</p>
+            <div class="contact-info">
+                <div class="icon-container">
+                    <img src="https://cdn.icon-icons.com/icons2/41/PNG/128/whatsappmessage_conversation_whatsap_7149.png" alt="WhatsApp" class="icon">
+                    <a href="tel:+931502041">+931 502 041</a>
+                </div>
+                <div class="icon-container">
+                    <img src="https://cdn.icon-icons.com/icons2/2642/PNG/512/google_mail_gmail_logo_icon_159346.png" alt="Email" class="icon">
+                    <a href="mailto:streamperu@.com">Junniormarocho4@.com</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <p>&copy; 2024 KUNSTREAMPERU. Todos los derechos reservados.</p>
+    </footer>
+    <script>
+        // Script para añadir la clase "scrolled" al header cuando se desplaza
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>
